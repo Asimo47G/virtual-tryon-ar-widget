@@ -33,7 +33,7 @@ Müşterileriniz kameralarını açarak gözlük, güneş gözlüğü, şapka ve
 ### 1. Repo'yu Klonlayın
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/virtual-tryon.git
+git clone https://github.com/Asimo47G/virtual-tryon-ar-widget.git
 cd virtual-tryon
 ```
 
