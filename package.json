@@ -1,0 +1,23 @@
+{
+  "name": "virtual-tryon",
+  "version": "1.0.0",
+  "description": "B2B Virtual Try-On AR Widget — Browser-based real-time accessory try-on for e-commerce",
+  "main": "index.html",
+  "keywords": [
+    "virtual-try-on",
+    "augmented-reality",
+    "ar",
+    "face-tracking",
+    "mediapipe",
+    "threejs",
+    "e-commerce",
+    "b2b",
+    "widget"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/virtual-tryon.git"
+  }
+}

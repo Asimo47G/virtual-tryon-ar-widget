@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="B2B Sanal Gözlük ve Aksesuar Deneme Kabini – Gerçek zamanlı AR ile gözlük, şapka ve aksesuar deneyin." />
+    <title>Virtual Try-On | Sanal Aksesuar Deneme</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="app-container" id="app">
+
+        <!-- ─── Header ─── -->
+        <header class="app-header">
+            <div class="logo">
+                <div class="logo-icon">👓</div>
+                <span class="logo-text">Virtual Try-On</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <span class="header-badge">AR Beta</span>
+                <span id="fps-counter"></span>
+            </div>
+        </header>
+
+        <!-- ─── Camera Viewport ─── -->
+        <section class="viewport" id="viewport">
+            <video id="cam-video" autoplay playsinline muted></video>
+            <canvas id="render-canvas"></canvas>
+
+            <!-- Status Overlay -->
+            <div class="status-message visible ready" id="status-message">
+                <span class="status-icon">🎯</span>
+                <p class="status-text">AI motoru hazırlanıyor...</p>
+            </div>
+
+            <!-- Loader -->
+            <div id="loader-overlay">
+                <div class="loader-spinner"></div>
+            </div>
+
+            <!-- No face warning -->
+            <div id="no-face-warning">
+                😶 Yüz algılanamadı – Lütfen kameraya bakın
+            </div>
+
+            <!-- Flash effect for photo capture -->
+            <div id="flash-overlay"></div>
+        </section>
+
+        <!-- ─── Controls ─── -->
+        <div class="controls-bar">
+            <button class="btn btn-primary" id="btn-start">
+                <span class="btn-icon">📷</span> Kamerayı Aç
+            </button>
+            <button class="btn btn-secondary" id="btn-capture" disabled>
+                <span class="btn-icon">📸</span> Fotoğraf Çek
+            </button>
+        </div>
+
+        <!-- ─── Product Selection ─── -->
+        <div class="product-panel">
+            <div class="panel-header">
+                <span class="panel-title">Ürünler</span>
+                <span class="panel-count" id="product-count"></span>
+            </div>
+            <div id="product-list">
+                <!-- JS ile doldurulacak -->
+            </div>
+        </div>
+
+        <!-- ─── Footer ─── -->
+        <div class="powered-by">
+            Powered by <strong>Virtual Try-On</strong> · AR Widget
+        </div>
+
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
