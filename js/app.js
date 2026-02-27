@@ -7,6 +7,25 @@ import { FaceTracker } from "./faceTracker.js";
 import { SceneManager } from "./sceneManager.js";
 import { ModelLoader } from "./modelLoader.js";
 
+// ─── Base URL Yardımcısı ───
+// import.meta.url, bu dosyanın tam URL'sini verir (ör. https://…/js/app.js)
+// Bir üst dizine çıkarak proje kökünü buluyoruz → GitHub Pages alt-yollarında doğru çalışır.
+function getBaseUrl() {
+    const scriptUrl = new URL(import.meta.url);
+    // /js/app.js → / (kök) veya /virtual-tryon-ar-widget/js/app.js → /virtual-tryon-ar-widget/
+    const path = scriptUrl.pathname.substring(
+        0,
+        scriptUrl.pathname.lastIndexOf("/js/") + 1
+    );
+    return `${scriptUrl.origin}${path}`;
+}
+
+const BASE_URL = getBaseUrl();
+
+function assetUrl(relativePath) {
+    return `${BASE_URL}${relativePath}`;
+}
+
 // ─── Demo Ürün Kataloğu ───
 const DEMO_PRODUCTS = [
     {
@@ -14,8 +33,8 @@ const DEMO_PRODUCTS = [
         name: "Aviator Classic",
         type: "glasses",
         format: "png",
-        modelUrl: "assets/models/glasses_aviator.png",
-        thumbnail: "assets/models/glasses_aviator.png",
+        modelUrl: assetUrl("assets/models/glasses_aviator.png"),
+        thumbnail: assetUrl("assets/models/glasses_aviator.png"),
         scaleFactor: 1.6,
         offsetY: 0.05,
         offsetZ: 0,
@@ -25,8 +44,8 @@ const DEMO_PRODUCTS = [
         name: "Round Retro",
         type: "glasses",
         format: "png",
-        modelUrl: "assets/models/glasses_round.png",
-        thumbnail: "assets/models/glasses_round.png",
+        modelUrl: assetUrl("assets/models/glasses_round.png"),
+        thumbnail: assetUrl("assets/models/glasses_round.png"),
         scaleFactor: 1.4,
         offsetY: 0.05,
         offsetZ: 0,
@@ -36,8 +55,8 @@ const DEMO_PRODUCTS = [
         name: "Cat Eye",
         type: "glasses",
         format: "png",
-        modelUrl: "assets/models/glasses_cat.png",
-        thumbnail: "assets/models/glasses_cat.png",
+        modelUrl: assetUrl("assets/models/glasses_cat.png"),
+        thumbnail: assetUrl("assets/models/glasses_cat.png"),
         scaleFactor: 1.5,
         offsetY: 0.04,
         offsetZ: 0,
@@ -47,8 +66,8 @@ const DEMO_PRODUCTS = [
         name: "Sport Shield",
         type: "glasses",
         format: "png",
-        modelUrl: "assets/models/glasses_sport.png",
-        thumbnail: "assets/models/glasses_sport.png",
+        modelUrl: assetUrl("assets/models/glasses_sport.png"),
+        thumbnail: assetUrl("assets/models/glasses_sport.png"),
         scaleFactor: 1.7,
         offsetY: 0.03,
         offsetZ: 0,
@@ -58,8 +77,8 @@ const DEMO_PRODUCTS = [
         name: "Wayfarer",
         type: "glasses",
         format: "png",
-        modelUrl: "assets/models/glasses_wayfarer.png",
-        thumbnail: "assets/models/glasses_wayfarer.png",
+        modelUrl: assetUrl("assets/models/glasses_wayfarer.png"),
+        thumbnail: assetUrl("assets/models/glasses_wayfarer.png"),
         scaleFactor: 1.5,
         offsetY: 0.05,
         offsetZ: 0,
@@ -69,8 +88,8 @@ const DEMO_PRODUCTS = [
         name: "Gradient Sun",
         type: "glasses",
         format: "png",
-        modelUrl: "assets/models/sun_gradient.png",
-        thumbnail: "assets/models/sun_gradient.png",
+        modelUrl: assetUrl("assets/models/sun_gradient.png"),
+        thumbnail: assetUrl("assets/models/sun_gradient.png"),
         scaleFactor: 1.6,
         offsetY: 0.04,
         offsetZ: 0,
@@ -99,11 +118,13 @@ class VirtualTryOnApp {
 
     async init() {
         this._cacheDOMElements();
-        this._showStatus("loading", "AI motoru yükleniyor...");
+        this._showStatus("loading", "AI motoru hazırlanıyor…");
 
         try {
             // MediaPipe Face Landmarker'ı yükle
+            console.log("[App] MediaPipe Face Landmarker yükleniyor…");
             await this.faceTracker.init();
+            console.log("[App] MediaPipe başarıyla yüklendi.");
 
             // Ürün listesini oluştur
             this._renderProductList();
@@ -114,7 +135,11 @@ class VirtualTryOnApp {
             this._showStatus("ready", "Kameranızı açmak için butona tıklayın");
         } catch (err) {
             console.error("[App] Init error:", err);
-            this._showStatus("error", "Yükleme hatası. Lütfen sayfayı yenileyin.");
+            const detail = err?.message || String(err);
+            this._showStatus(
+                "error",
+                `Yükleme hatası: ${detail}. Lütfen sayfayı yenileyin.`
+            );
         }
     }
 

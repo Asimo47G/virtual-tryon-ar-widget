@@ -3,7 +3,9 @@
  * 468 adet 3D yüz noktası gerçek zamanlı takibi
  */
 
-const MEDIAPIPE_WASM_CDN = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm";
+const MEDIAPIPE_VERSION = "0.10.18";
+const MEDIAPIPE_CDN_BASE = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MEDIAPIPE_VERSION}`;
+const MEDIAPIPE_WASM_CDN = `${MEDIAPIPE_CDN_BASE}/wasm`;
 const FACE_LANDMARKER_MODEL = "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
 
 export class FaceTracker {
@@ -16,23 +18,45 @@ export class FaceTracker {
     }
 
     async init() {
+        console.log("[FaceTracker] MediaPipe yükleniyor…", MEDIAPIPE_CDN_BASE);
+
         const { FaceLandmarker, FilesetResolver } = await import(
-            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest"
+            MEDIAPIPE_CDN_BASE
         );
 
+        console.log("[FaceTracker] WASM runtime yükleniyor…");
         const vision = await FilesetResolver.forVisionTasks(MEDIAPIPE_WASM_CDN);
 
-        this.faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
-            baseOptions: {
-                modelAssetPath: FACE_LANDMARKER_MODEL,
-                delegate: "GPU",
-            },
-            runningMode: "VIDEO",
-            numFaces: 1,
-            outputFaceBlendshapes: false,
-            outputFacialTransformationMatrixes: true,
-        });
+        // Önce GPU dene, başarısız olursa CPU'ya düş
+        let landmarker;
+        try {
+            landmarker = await FaceLandmarker.createFromOptions(vision, {
+                baseOptions: {
+                    modelAssetPath: FACE_LANDMARKER_MODEL,
+                    delegate: "GPU",
+                },
+                runningMode: "VIDEO",
+                numFaces: 1,
+                outputFaceBlendshapes: false,
+                outputFacialTransformationMatrixes: true,
+            });
+            console.log("[FaceTracker] GPU delegate ile başlatıldı.");
+        } catch (gpuErr) {
+            console.warn("[FaceTracker] GPU başarısız, CPU'ya geçiliyor…", gpuErr);
+            landmarker = await FaceLandmarker.createFromOptions(vision, {
+                baseOptions: {
+                    modelAssetPath: FACE_LANDMARKER_MODEL,
+                    delegate: "CPU",
+                },
+                runningMode: "VIDEO",
+                numFaces: 1,
+                outputFaceBlendshapes: false,
+                outputFacialTransformationMatrixes: true,
+            });
+            console.log("[FaceTracker] CPU delegate ile başlatıldı.");
+        }
 
+        this.faceLandmarker = landmarker;
         console.log("[FaceTracker] Initialized successfully.");
     }
 
