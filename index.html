@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="description" content="B2B Sanal Gözlük ve Aksesuar Deneme Kabini – Gerçek zamanlı AR ile gözlük, şapka ve aksesuar deneyin." />
+    <meta name="description"
+        content="B2B Sanal Gözlük ve Aksesuar Deneme Kabini – Gerçek zamanlı AR ile gözlük, şapka ve aksesuar deneyin." />
     <title>Virtual Try-On | Sanal Aksesuar Deneme</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script type="importmap">
+    {
+        "imports": {
+            "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/vision_bundle.mjs",
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/examples/jsm/loaders/GLTFLoader.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js"
+        }
+    }
+    </script>
 </head>
+
 <body>
     <div class="app-container" id="app">
 
@@ -77,4 +89,5 @@
 
     <script type="module" src="js/app.js"></script>
 </body>
+
 </html>

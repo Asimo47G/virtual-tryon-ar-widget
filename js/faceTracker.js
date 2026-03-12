@@ -3,6 +3,8 @@
  * 468 adet 3D yüz noktası gerçek zamanlı takibi
  */
 
+import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+
 const MEDIAPIPE_VERSION = "0.10.18";
 const MEDIAPIPE_WASM_CDN = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MEDIAPIPE_VERSION}/wasm`;
 const FACE_LANDMARKER_MODEL = "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
@@ -18,19 +20,6 @@ export class FaceTracker {
 
     async init() {
         console.log("[FaceTracker] MediaPipe yükleniyor…");
-
-        let FaceLandmarker, FilesetResolver;
-        try {
-            const module = await import(
-                `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MEDIAPIPE_VERSION}/+esm`
-            );
-            FaceLandmarker = module.FaceLandmarker;
-            FilesetResolver = module.FilesetResolver;
-            console.log("[FaceTracker] MediaPipe modülü başarıyla yüklendi.");
-        } catch (importErr) {
-            console.error("[FaceTracker] MediaPipe import hatası:", importErr);
-            throw new Error("MediaPipe kütüphanesi yüklenemedi: " + importErr.message);
-        }
 
         console.log("[FaceTracker] WASM runtime yükleniyor…");
         const vision = await FilesetResolver.forVisionTasks(MEDIAPIPE_WASM_CDN);
